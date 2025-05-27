@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn Money - Spin & Win</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --accent-color: #fd79a8;
+            --dark-color: #2d3436;
+            --light-color: #f5f6fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, #6c5ce7, #fd79a8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: pulse 2s infinite;
+        }
+        
+        .user-balance {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .user-balance:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            border: none;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            z-index: 2;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card.spin-wheel {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: white;
+        }
+        
+        .feature-card.daily-checkin {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            color: white;
+        }
+        
+        .feature-card.watch-video {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: white;
+        }
+        
+        .feature-card.captcha {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: white;
+        }
+        
+        .feature-card.referral {
+            background: linear-gradient(135deg, #ffc3a0 0%, #ffafbd 100%);
+            color: white;
+        }
+        
+        .feature-card.withdraw {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            color: white;
+        }
+        
+        .feature-card.wallet {
+            background: linear-gradient(135deg, #5ee7df 0%, #b490ca 100%);
+            color: white;
+        }
+        
+        .feature-card.history {
+            background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+            color: white;
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .btn-feature {
+            border: none;
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-weight: 600;
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .btn-feature:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            background: white;
+            color: var(--primary-color);
+        }
+        
+        .spin-wheel-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .wheel {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 10px solid white;
+            box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.1), 0 0 30px rgba(0, 0, 0, 0.2);
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            transform: rotate(0deg);
+        }
+        
+        .wheel-center {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .wheel-section {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: bottom right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .spin-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 11;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .spin-btn:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .spin-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-bottom: none;
+        }
+        
+        .withdraw-form .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .withdraw-form .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(108, 92, 231, 0.25);
+        }
+        
+        .btn-withdraw {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border: none;
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .btn-withdraw:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(108, 92, 231, 0.3);
+            color: white;
+        }
+        
+        .history-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .history-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .history-item.credit {
+            border-left: 4px solid #00b894;
+        }
+        
+        .history-item.debit {
+            border-left: 4px solid #d63031;
+        }
+        
+        .captcha-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .captcha-code {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            letter-spacing: 5px;
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            user-select: none;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .video-timer {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 5px;
+            background: #ddd;
+            position: relative;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 5px;
+            width: 0%;
+            transition: width 1s linear;
+        }
+        
+        .developer-credit {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: linear-gradient(45deg, #6c5ce7, #fd79a8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: bounce 2s infinite;
+            z-index: 1000;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+        
+        .floating { 
+            animation-name: floating;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+        
+        @keyframes floating {
+            0% { transform: translate(0,  0px); }
+            50%  { transform: translate(0, 10px); }
+            100%   { transform: translate(0, -0px); }
+        }
+        
+        .limit-counter {
+            font-size: 0.8rem;
+            color: white;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 3px 8px;
+            border-radius: 10px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">Earn<span>Money</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#walletModal"><i class="fas fa-wallet me-1"></i> Wallet</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#historyModal"><i class="fas fa-history me-1"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="user-balance mt-1">
+                            <i class="fas fa-rupee-sign me-1"></i> <span id="userBalance">0.00</span>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> User
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- Spin Wheel -->
+            <div class="col-md-6 mb-4">
+                <div class="feature-card spin-wheel h-100 animate__animated animate__fadeInLeft">
+                    <div class="card-body text-center p-4">
+                        <div class="card-icon">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <h3 class="card-title mb-3">Spin Wheel</h3>
+                        <p class="card-text mb-4">Spin the wheel and win rewards between ₹0.03 to ₹0.50</p>
+                        
+                        <div class="spin-wheel-container mb-4">
+                            <div class="wheel" id="wheel">
+                                <!-- Wheel sections will be added by JavaScript -->
+                            </div>
+                            <button class="spin-btn" id="spinBtn">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="limit-counter">Today: <span id="spinCount">0</span>/10</div>
+                        <button class="btn btn-feature" id="spinInfoBtn" data-bs-toggle="modal" data-bs-target="#spinInfoModal">
+                            <i class="fas fa-info-circle me-2"></i>How it works
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Daily Check-in -->
+            <div class="col-md-6 mb-4">
+                <div class="feature-card daily-checkin h-100 animate__animated animate__fadeInRight">
+                    <div class="card-body text-center p-4">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3 class="card-title mb-3">Daily Check-in</h3>
+                        <p class="card-text mb-4">Check in daily to earn rewards between ₹0.03 to ₹0.50</p>
+                        
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-light" disabled>Mon</button>
+                                <button type="button" class="btn btn-outline-light" disabled>Tue</button>
+                                <button type="button" class="btn btn-outline-light" disabled>Wed</button>
+                                <button type="button" class="btn btn-outline-light" disabled>Thu</button>
+                                <button type="button" class="btn btn-outline-light" disabled>Fri</button>
+                                <button type="button" class="btn btn-outline-light" disabled>Sat</button>
+                                <button type="button" class="btn btn-outline-light" disabled>Sun</button>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-feature mb-2" id="checkInBtn">
+                            <i class="fas fa-check-circle me-2"></i>Check In Today
+                        </button>
+                        <div class="limit-counter">Today: <span id="checkInCount">0</span>/1</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Watch Video -->
+            <div class="col-md-6 mb-4">
+                <div class="feature-card watch-video h-100 animate__animated animate__fadeInLeft">
+                    <div class="card-body text-center p-4">
+                        <div class="card-icon">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <h3 class="card-title mb-3">Watch Video</h3>
+                        <p class="card-text mb-4">Watch a 30-second video to earn between ₹0.03 to ₹0.50</p>
+                        
+                        <div class="video-container mb-3" id="videoContainer">
+                            <i class="fas fa-play fa-3x"></i>
+                            <div class="video-timer" id="videoTimer">0:30</div>
+                        </div>
+                        
+                        <div class="progress-bar mb-3">
+                            <div class="progress" id="videoProgress"></div>
+                        </div>
+                        
+                        <button class="btn btn-feature mb-2" id="watchVideoBtn">
+                            <i class="fas fa-play me-2"></i>Watch Video
+                        </button>
+                        <div class="limit-counter">Today: <span id="videoCount">0</span>/10</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Solve Captcha -->
+            <div class="col-md-6 mb-4">
+                <div class="feature-card captcha h-100 animate__animated animate__fadeInRight">
+                    <div class="card-body text-center p-4">
+                        <div class="card-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3 class="card-title mb-3">Solve Captcha</h3>
+                        <p class="card-text mb-4">Solve captcha to earn between ₹0.03 to ₹0.50</p>
+                        
+                        <div class="captcha-container mb-3">
+                            <div class="captcha-code mb-3" id="captchaCode">A7B9C2</div>
+                            <input type="text" class="form-control mb-3" id="captchaInput" placeholder="Enter the captcha code">
+                            <button class="btn btn-feature w-100" id="verifyCaptchaBtn">
+                                <i class="fas fa-check me-2"></i>Verify
+                            </button>
+                        </div>
+                        
+                        <div class="limit-counter">Today: <span id="captchaCount">0</span>/10</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Referral System -->
+            <div class="col-md-6 mb-4">
+                <div class="feature-card referral h-100 animate__animated animate__fadeInLeft">
+                    <div class="card-body text-center p-4">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="card-title mb-3">Refer & Earn</h3>
+                        <p class="card-text mb-4">Earn ₹2 for each friend who signs up using your referral code</p>
+                        
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="referralCode" value="ANUP1234" readonly>
+                            <button class="btn btn-light" id="copyReferralBtn">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        
+                        <button class="btn btn-feature mb-2" data-bs-toggle="modal" data-bs-target="#referralModal">
+                            <i class="fas fa-share-alt me-2"></i>Invite Friends
+                        </button>
+                        <div class="limit-counter">Total Referrals: <span id="referralCount">0</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Withdraw Money -->
+            <div class="col-md-6 mb-4">
+                <div class="feature-card withdraw h-100 animate__animated animate__fadeInRight">
+                    <div class="card-body text-center p-4">
+                        <div class="card-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <h3 class="card-title mb-3">Withdraw Money</h3>
+                        <p class="card-text mb-4">Minimum withdrawal ₹20 via UPI. Processed within 24 hours.</p>
+                        
+                        <button class="btn btn-feature mb-2" data-bs-toggle="modal" data-bs-target="#withdrawModal">
+                            <i class="fas fa-rupee-sign me-2"></i>Withdraw Now
+                        </button>
+                        <div class="limit-counter">Minimum: ₹20</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Credit -->
+    <div class="developer-credit floating">
+        <i class="fas fa-code me-1"></i> Developer: Anup Padhan
+    </div>
+
+    <!-- Spin Info Modal -->
+    <div class="modal fade" id="spinInfoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-info-circle me-2"></i>Spin Wheel Info</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>Spin the wheel daily to earn rewards between ₹0.03 to ₹0.50</li>
+                        <li>You can spin the wheel 10 times per day</li>
+                        <li>Amount will be credited to your wallet immediately</li>
+                        <li>Try your luck and win bigger amounts!</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal fade" id="withdrawModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-rupee-sign me-2"></i>Withdraw Money</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="withdraw-form">
+                        <div class="mb-3">
+                            <label for="withdrawAmount" class="form-label">Amount (Minimum ₹20)</label>
+                            <input type="number" class="form-control" id="withdrawAmount" min="20" step="0.01" placeholder="Enter amount to withdraw">
+                        </div>
+                        <div class="mb-3">
+                            <label for="upiId" class="form-label">UPI ID</label>
+                            <input type="text" class="form-control" id="upiId" placeholder="Enter your UPI ID">
+                        </div>
+                        <div class="mb-3">
+                            <label for="withdrawCaptcha" class="form-label">Captcha</label>
+                            <div class="d-flex align-items-center">
+                                <input type="text" class="form-control me-2" id="withdrawCaptcha" placeholder="Enter captcha">
+                                <span class="captcha-code p-2" id="withdrawCaptchaCode">X9Y8Z7</span>
+                                <button type="button" class="btn btn-sm btn-light ms-2" id="refreshWithdrawCaptcha">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> Withdrawal will be processed within 24 hours.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-withdraw" id="submitWithdrawBtn">Submit Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div class="modal fade" id="walletModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-wallet me-2"></i>My Wallet</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <h2 class="mb-1"><i class="fas fa-rupee-sign"></i> <span id="walletBalance">0.00</span></h2>
+                        <p class="text-muted">Available Balance</p>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <h6 class="mb-1">Total Earned</h6>
+                            <p class="mb-0 text-success"><i class="fas fa-rupee-sign"></i> <span id="totalEarned">0.00</span></p>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Total Withdrawn</h6>
+                            <p class="mb-0 text-danger"><i class="fas fa-rupee-sign"></i> <span id="totalWithdrawn">0.00</span></p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h5 class="mb-3"><i class="fas fa-coins me-2"></i>Earning Summary</h5>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <h6 class="mb-1">Spin Wheel</h6>
+                                <p class="mb-0"><i class="fas fa-rupee-sign"></i> <span id="spinEarnings">0.00</span></p>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <h6 class="mb-1">Daily Check-in</h6>
+                                <p class="mb-0"><i class="fas fa-rupee-sign"></i> <span id="checkInEarnings">0.00</span></p>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <h6 class="mb-1">Watch Video</h6>
+                                <p class="mb-0"><i class="fas fa-rupee-sign"></i> <span id="videoEarnings">0.00</span></p>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <h6 class="mb-1">Solve Captcha</h6>
+                                <p class="mb-0"><i class="fas fa-rupee-sign"></i> <span id="captchaEarnings">0.00</span></p>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <h6 class="mb-1">Referral Bonus</h6>
+                                <p class="mb-0"><i class="fas fa-rupee-sign"></i> <span id="referralEarnings">0.00</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal fade" id="historyModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-history me-2"></i>Transaction History</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-4" id="historyTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#allHistory">All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#creditHistory">Credits</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#debitHistory">Withdrawals</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="allHistory">
+                            <div class="history-list" id="allHistoryList">
+                                <!-- History items will be added by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="creditHistory">
+                            <div class="history-list" id="creditHistoryList">
+                                <!-- History items will be added by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="debitHistory">
+                            <div class="history-list" id="debitHistoryList">
+                                <!-- History items will be added by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Modal -->
+    <div class="modal fade" id="referralModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-users me-2"></i>Invite Friends</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <h6 class="mb-2">Your Referral Link</h6>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="referralLink" value="https://earnmoney.com/ref/ANUP1234" readonly>
+                            <button class="btn btn-primary" id="copyReferralLinkBtn">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="mb-3">Share Via</h6>
+                        <div class="d-flex justify-content-around">
+                            <button class="btn btn-outline-primary"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                            <button class="btn btn-outline-info"><i class="fab fa-telegram"></i> Telegram</button>
+                            <button class="btn btn-outline-secondary"><i class="fas fa-envelope"></i> Email</button>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <h6><i class="fas fa-gift me-2"></i>Referral Bonus</h6>
+                        <p class="mb-0">Earn ₹2 for each friend who signs up using your referral link and completes their first task.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-user me-2"></i>My Profile</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="profileName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="profileName" value="Anup Padhan">
+                        </div>
+                        <div class="mb-3">
+                            <label for="profileMobile" class="form-label">Mobile Number</label>
+                            <input type="text" class="form-control" id="profileMobile" value="9876543210">
+                        </div>
+                        <div class="mb-3">
+                            <label for="profileEmail" class="form-label">Email (Optional)</label>
+                            <input type="email" class="form-control" id="profileEmail" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="profilePassword" class="form-label">Change Password</label>
+                            <input type="password" class="form-control" id="profilePassword" placeholder="Enter new password">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <strong class="me-auto">Success</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <span id="successToastMessage">Operation completed successfully!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-danger text-white">
+                <strong class="me-auto">Error</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <span id="errorToastMessage">An error occurred!</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize variables
+        let balance = 0;
+        let spinCount = 0;
+        let checkInCount = 0;
+        let videoCount = 0;
+        let captchaCount = 0;
+        let referralCount = 0;
+        
+        let spinEarnings = 0;
+        let checkInEarnings = 0;
+        let videoEarnings = 0;
+        let captchaEarnings = 0;
+        let referralEarnings = 0;
+        let totalWithdrawn = 0;
+        
+        let history = [];
+        
+        // Initialize wheel
+        const wheel = document.getElementById('wheel');
+        const spinBtn = document.getElementById('spinBtn');
+        const wheelSections = 12;
+        const minSpinAmount = 0.03;
+        const maxSpinAmount = 0.50;
+        
+        // Create wheel sections
+        function createWheelSections() {
+            wheel.innerHTML = '';
+            const sectionAngle = 360 / wheelSections;
+            
+            for (let i = 0; i < wheelSections; i++) {
+                const section = document.createElement('div');
+                section.className = 'wheel-section';
+                section.style.transform = `rotate(${i * sectionAngle}deg)`;
+                section.style.backgroundColor = getRandomColor();
+                
+                const amount = (Math.random() * (maxSpinAmount - minSpinAmount) + minSpinAmount).toFixed(2);
+                section.setAttribute('data-amount', amount);
+                
+                const amountElement = document.createElement('div');
+                amountElement.textContent = `₹${amount}`;
+                amountElement.style.transform = `rotate(${sectionAngle / 2}deg)`;
+                amountElement.style.position = 'absolute';
+                amountElement.style.top = '20px';
+                amountElement.style.right = '20px';
+                
+                section.appendChild(amountElement);
+                wheel.appendChild(section);
+            }
+            
+            // Add center
+            const center = document.createElement('div');
+            center.className = 'wheel-center';
+            center.textContent = 'SPIN';
+            wheel.appendChild(center);
+        }
+        
+        function getRandomColor() {
+            const colors = [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', 
+                '#FF9F40', '#8AC249', '#EA5F89', '#00BFFF', '#FFD700'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Spin wheel function
+        function spinWheel() {
+            if (spinCount >= 10) {
+                showErrorToast('Daily spin limit reached (10/10)');
+                return;
+            }
+            
+            spinBtn.disabled = true;
+            
+            // Random rotation (5-10 full rotations plus a random section)
+            const rotations = 5 + Math.floor(Math.random() * 5);
+            const sectionAngle = 360 / wheelSections;
+            const randomSection = Math.floor(Math.random() * wheelSections);
+            const rotationAngle = (360 * rotations) + (randomSection * sectionAngle);
+            
+            wheel.style.transform = `rotate(${-rotationAngle}deg)`;
+            
+            setTimeout(() => {
+                const sections = document.querySelectorAll('.wheel-section');
+                const winningSection = sections[wheelSections - 1 - (randomSection % wheelSections)];
+                const amount = parseFloat(winningSection.getAttribute('data-amount'));
+                
+                spinCount++;
+                updateSpinCount();
+                
+                balance += amount;
+                spinEarnings += amount;
+                updateBalance();
+                updateWallet();
+                
+                // Add to history
+                addHistory('credit', amount, 'Spin Wheel Reward');
+                
+                showSuccessToast(`Congratulations! You won ₹${amount}`);
+                
+                spinBtn.disabled = false;
+            }, 5000);
+        }
+        
+        // Daily check-in
+        function dailyCheckIn() {
+            if (checkInCount >= 1) {
+                showErrorToast('You have already checked in today');
+                return;
+            }
+            
+            const amount = (Math.random() * (maxSpinAmount - minSpinAmount) + minSpinAmount).toFixed(2);
+            
+            checkInCount++;
+            document.getElementById('checkInCount').textContent = checkInCount;
+            
+            balance += parseFloat(amount);
+            checkInEarnings += parseFloat(amount);
+            updateBalance();
+            updateWallet();
+            
+            // Add to history
+            addHistory('credit', amount, 'Daily Check-in Reward');
+            
+            showSuccessToast(`Daily check-in successful! You earned ₹${amount}`);
+        }
+        
+        // Watch video
+        function watchVideo() {
+            if (videoCount >= 10) {
+                showErrorToast('Daily video limit reached (10/10)');
+                return;
+            }
+            
+            const videoBtn = document.getElementById('watchVideoBtn');
+            videoBtn.disabled = true;
+            
+            const videoContainer = document.getElementById('videoContainer');
+            const videoTimer = document.getElementById('videoTimer');
+            const videoProgress = document.getElementById('videoProgress');
+            
+            videoContainer.innerHTML = '<i class="fas fa-play fa-3x"></i>';
+            videoContainer.innerHTML += '<div class="video-timer" id="videoTimer">0:30</div>';
+            
+            let seconds = 30;
+            videoProgress.style.width = '0%';
+            
+            const timer = setInterval(() => {
+                seconds--;
+                
+                const progress = ((30 - seconds) / 30) * 100;
+                videoProgress.style.width = `${progress}%`;
+                
+                const displaySeconds = seconds < 10 ? `0${seconds}` : seconds;
+                videoTimer.textContent = `0:${displaySeconds}`;
+                
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    
+                    const amount = (Math.random() * (maxSpinAmount - minSpinAmount) + minSpinAmount).toFixed(2);
+                    
+                    videoCount++;
+                    document.getElementById('videoCount').textContent = videoCount;
+                    
+                    balance += parseFloat(amount);
+                    videoEarnings += parseFloat(amount);
+                    updateBalance();
+                    updateWallet();
+                    
+                    // Add to history
+                    addHistory('credit', amount, 'Watch Video Reward');
+                    
+                    showSuccessToast(`Video watched! You earned ₹${amount}`);
+                    
+                    videoBtn.disabled = false;
+                    videoProgress.style.width = '0%';
+                    videoTimer.textContent = '0:30';
+                }
+            }, 1000);
+        }
+        
+        // Solve captcha
+        function generateCaptcha() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let captcha = '';
+            
+            for (let i = 0; i < 6; i++) {
+                captcha += chars[Math.floor(Math.random() * chars.length)];
+            }
+            
+            document.getElementById('captchaCode').textContent = captcha;
+            document.getElementById('captchaInput').value = '';
+            
+            return captcha;
+        }
+        
+        function verifyCaptcha() {
+            if (captchaCount >= 10) {
+                showErrorToast('Daily captcha limit reached (10/10)');
+                return;
+            }
+            
+            const captchaCode = document.getElementById('captchaCode').textContent;
+            const userInput = document.getElementById('captchaInput').value.trim();
+            
+            if (userInput === '') {
+                showErrorToast('Please enter the captcha code');
+                return;
+            }
+            
+            if (userInput !== captchaCode) {
+                showErrorToast('Invalid captcha code. Please try again.');
+                generateCaptcha();
+                return;
+            }
+            
+            const amount = (Math.random() * (maxSpinAmount - minSpinAmount) + minSpinAmount).toFixed(2);
+            
+            captchaCount++;
+            document.getElementById('captchaCount').textContent = captchaCount;
+            
+            balance += parseFloat(amount);
+            captchaEarnings += parseFloat(amount);
+            updateBalance();
+            updateWallet();
+            
+            // Add to history
+            addHistory('credit', amount, 'Captcha Reward');
+            
+            showSuccessToast(`Captcha verified! You earned ₹${amount}`);
+            
+            generateCaptcha();
+        }
+        
+        // Withdraw money
+        function submitWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const upiId = document.getElementById('upiId').value.trim();
+            const captchaInput = document.getElementById('withdrawCaptcha').value.trim();
+            const captchaCode = document.getElementById('withdrawCaptchaCode').textContent;
+            
+            if (isNaN(amount) || amount < 20) {
+                showErrorToast('Minimum withdrawal amount is ₹20');
+                return;
+            }
+            
+            if (amount > balance) {
+                showErrorToast('Insufficient balance');
+                return;
+            }
+            
+            if (!upiId) {
+                showErrorToast('Please enter your UPI ID');
+                return;
+            }
+            
+            if (!captchaInput) {
+                showErrorToast('Please enter the captcha');
+                return;
+            }
+            
+            if (captchaInput !== captchaCode) {
+                showErrorToast('Invalid captcha. Please try again.');
+                generateWithdrawCaptcha();
+                return;
+            }
+            
+            balance -= amount;
+            totalWithdrawn += amount;
+            updateBalance();
+            updateWallet();
+            
+            // Add to history
+            addHistory('debit', amount, 'Withdrawal to ' + upiId);
+            
+            // Reset form
+            document.getElementById('withdrawAmount').value = '';
+            document.getElementById('upiId').value = '';
+            document.getElementById('withdrawCaptcha').value = '';
+            generateWithdrawCaptcha();
+            
+            // Hide modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('withdrawModal'));
+            modal.hide();
+            
+            showSuccessToast(`Withdrawal request of ₹${amount} submitted. It will be processed within 24 hours.`);
+        }
+        
+        function generateWithdrawCaptcha() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let captcha = '';
+            
+            for (let i = 0; i < 6; i++) {
+                captcha += chars[Math.floor(Math.random() * chars.length)];
+            }
+            
+            document.getElementById('withdrawCaptchaCode').textContent = captcha;
+            document.getElementById('withdrawCaptcha').value = '';
+            
+            return captcha;
+        }
+        
+        // Referral system
+        function copyReferralCode() {
+            const referralCode = document.getElementById('referralCode');
+            referralCode.select();
+            document.execCommand('copy');
+            
+            showSuccessToast('Referral code copied to clipboard!');
+        }
+        
+        function copyReferralLink() {
+            const referralLink = document.getElementById('referralLink');
+            referralLink.select();
+            document.execCommand('copy');
+            
+            showSuccessToast('Referral link copied to clipboard!');
+        }
+        
+        // History functions
+        function addHistory(type, amount, description) {
+            const transaction = {
+                id: Date.now(),
+                type: type,
+                amount: amount,
+                description: description,
+                date: new Date().toLocaleString()
+            };
+            
+            history.unshift(transaction);
+            updateHistory();
+        }
+        
+        function updateHistory() {
+            const allHistoryList = document.getElementById('allHistoryList');
+            const creditHistoryList = document.getElementById('creditHistoryList');
+            const debitHistoryList = document.getElementById('debitHistoryList');
+            
+            allHistoryList.innerHTML = '';
+            creditHistoryList.innerHTML = '';
+            debitHistoryList.innerHTML = '';
+            
+            history.forEach(transaction => {
+                const historyItem = document.createElement('div');
+                historyItem.className = `history-item ${transaction.type}`;
+                
+                const amountClass = transaction.type === 'credit' ? 'text-success' : 'text-danger';
+                const amountSign = transaction.type === 'credit' ? '+' : '-';
+                
+                historyItem.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="mb-1">${transaction.description}</h6>
+                            <small class="text-muted">${transaction.date}</small>
+                        </div>
+                        <div class="${amountClass} fw-bold">${amountSign}₹${transaction.amount}</div>
+                    </div>
+                `;
+                
+                allHistoryList.appendChild(historyItem.cloneNode(true));
+                
+                if (transaction.type === 'credit') {
+                    creditHistoryList.appendChild(historyItem.cloneNode(true));
+                } else {
+                    debitHistoryList.appendChild(historyItem.cloneNode(true));
+                }
+            });
+        }
+        
+        // Update UI functions
+        function updateBalance() {
+            document.getElementById('userBalance').textContent = balance.toFixed(2);
+        }
+        
+        function updateWallet() {
+            document.getElementById('walletBalance').textContent = balance.toFixed(2);
+            document.getElementById('totalEarned').textContent = (spinEarnings + checkInEarnings + videoEarnings + captchaEarnings + referralEarnings).toFixed(2);
+            document.getElementById('totalWithdrawn').textContent = totalWithdrawn.toFixed(2);
+            
+            document.getElementById('spinEarnings').textContent = spinEarnings.toFixed(2);
+            document.getElementById('checkInEarnings').textContent = checkInEarnings.toFixed(2);
+            document.getElementById('videoEarnings').textContent = videoEarnings.toFixed(2);
+            document.getElementById('captchaEarnings').textContent = captchaEarnings.toFixed(2);
+            document.getElementById('referralEarnings').textContent = referralEarnings.toFixed(2);
+        }
+        
+        function updateSpinCount() {
+            document.getElementById('spinCount').textContent = spinCount;
+        }
+        
+        // Toast notifications
+        function showSuccessToast(message) {
+            document.getElementById('successToastMessage').textContent = message;
+            const toast = new bootstrap.Toast(document.getElementById('successToast'));
+            toast.show();
+        }
+        
+        function showErrorToast(message) {
+            document.getElementById('errorToastMessage').textContent = message;
+            const toast = new bootstrap.Toast(document.getElementById('errorToast'));
+            toast.show();
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            createWheelSections();
+            generateCaptcha();
+            generateWithdrawCaptcha();
+            updateBalance();
+            updateWallet();
+            updateHistory();
+            
+            // Event listeners
+            spinBtn.addEventListener('click', spinWheel);
+            document.getElementById('checkInBtn').addEventListener('click', dailyCheckIn);
+            document.getElementById('watchVideoBtn').addEventListener('click', watchVideo);
+            document.getElementById('verifyCaptchaBtn').addEventListener('click', verifyCaptcha);
+            document.getElementById('submitWithdrawBtn').addEventListener('click', submitWithdrawal);
+            document.getElementById('refreshWithdrawCaptcha').addEventListener('click', generateWithdrawCaptcha);
+            document.getElementById('copyReferralBtn').addEventListener('click', copyReferralCode);
+            document.getElementById('copyReferralLinkBtn').addEventListener('click', copyReferralLink);
+            
+            // Add some demo history
+            addHistory('credit', '0.25', 'Spin Wheel Reward');
+            addHistory('credit', '0.12', 'Daily Check-in Reward');
+            addHistory('credit', '0.35', 'Watch Video Reward');
+            addHistory('credit', '0.08', 'Captcha Reward');
+            addHistory('credit', '2.00', 'Referral Bonus');
+        });
+    </script>
+</body>
+</html>
